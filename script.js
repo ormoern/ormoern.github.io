@@ -17,8 +17,8 @@ const state = {
     "Latte": 65,
     "Cappuccino": 65,
     "Flat white": 130,
-    "Black tea (300ml): 60,
-    "Green tea (300ml): 40,
+    "Black tea (300ml)": 60,
+    "Green tea (300ml)": 40,
     "Energy drink (250ml)": 75,
     "Energy drink (500ml)": 150
   },
