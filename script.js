@@ -317,6 +317,7 @@ userInfoSaveButton.addEventListener("click", () => {
     generateErrorMessage(undefinedError, inputContainer);
     return
   };
+  };
 
   data.userData.metabolismSpeedDisplay = metabolismSpeedValue;
   data.userData.metabolismSpeed = data.metabolismSpeed[metabolismSpeedValue]
