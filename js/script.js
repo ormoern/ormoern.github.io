@@ -389,9 +389,9 @@ addDataButton.addEventListener("click", () => {
       let customDrinkValue = customDrinkName.value;
       let customDrinkCaffeineValue = customDrinkCaffeine.value;
       dataOutput = {
-        timeValue,
-        customDrinkValue,
-        customDrinkCaffeineValue
+        "Time": timeValue,
+        "Drink": customDrinkValue,
+        "Caffeine": customDrinkCaffeineValue
       };
     } else if (!customDrinkNameValid && !customDrinkCaffeineValid) {
         ui.errorMessageContainer.textContent = "No custom drink info provided...";
@@ -403,9 +403,9 @@ addDataButton.addEventListener("click", () => {
     let presetDrinkValue = presetDrink.value;
     let presetDrinkCaffeineValue = state.presetDrinks[presetDrinkValue];
     dataOutput = {
-      timeValue,
-      presetDrinkValue,
-      presetDrinkCaffeineValue
+      "Time": timeValue,
+      "Drink": presetDrinkValue,
+      "Caffeine": presetDrinkCaffeineValue
     };
   };
 
@@ -417,3 +417,6 @@ addDataButton.addEventListener("click", () => {
   return
 });
 
+clearDataButton.addEventListener("click", () => {
+  state.data = []
+});
