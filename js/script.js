@@ -284,7 +284,7 @@ const renderDataTable = (arrayOfValueObjects, container) => {
     table.append(valuesRow);
   });
 
-  container.innerHTML = "";
+  container.innerHTML = "ValuesTable";
   container.appendChild(table);
 };
 
