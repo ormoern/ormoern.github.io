@@ -444,11 +444,12 @@ addDataButton.addEventListener("click", () => {
 
   if (Object.keys(dataOutput).length > 0) {
     state.data.push(dataOutput);
+    renderDataTable(state.data, ui.drinkTableContainer)
   };
   console.log("Data entry:", dataOutput)
   console.log("Aggregate data:", state.data)
 
-  renderDataTable(state.data, ui.drinkTableContainer)
+
   return
 });
 
