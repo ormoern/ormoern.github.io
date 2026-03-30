@@ -326,13 +326,12 @@ const presetDrink = ui.presetDrink;
 
 // checkbox action
 const customDrinkCheckBox = ui.customDrinkCheckBox;
-const customDrink = state.customDrink;
 
 customDrinkCheckBox.addEventListener("change", () => {
   if (customDrinkCheckBox.checked) {
-    customDrink = true;
+    state.customDrink = true;
   } else {
-    customDrink = false;
+    state.customDrink = false;
   };
 });
 
