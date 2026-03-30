@@ -350,7 +350,7 @@ let errorMessage = ""
 userInfoSaveButton.addEventListener("click", () => {
   let bodyMassValue = bodyMass.value;
   let metabolismSpeedValue = metabolismSpeed.value;
-  let bodyMassInputValid = checkInputNumber(bodyMassValue, "weight");
+  let bodyMassInputValid = checkInputNumber(bodyMassValue, " weight");
 
   if (bodyMassInputValid) {
     state.userData.bodyMass = bodyMassValue;
@@ -375,8 +375,8 @@ addDataButton.addEventListener("click", () => {
   };
 
   if (state.customDrink) {
-    let customDrinkNameValid = checkInputText(customDrinkName.value, "drink");
-    let customDrinkCaffeineValid = checkInputNumber(customDrinkCaffeine.value, "caffeine");
+    let customDrinkNameValid = checkInputText(customDrinkName.value, " drink");
+    let customDrinkCaffeineValid = checkInputNumber(customDrinkCaffeine.value, " caffeine");
     if (customDrinkNameValid && customDrinkCaffeineValid && timeValue) {
       let customDrinkValue = customDrinkName.value;
       let customDrinkCaffeineValue = customDrinkCaffeine.value;
@@ -388,7 +388,7 @@ addDataButton.addEventListener("click", () => {
     };
   } else if (presetDrink && timeValue) {
     let presetDrinkValue = presetDrink.value;
-    let presetDrinkCaffeineValue = state.presetDrinks[presetDrink];
+    let presetDrinkCaffeineValue = state.presetDrinks[presetDrinkValue];
     dataOutput = {
       timeValue,
       presetDrinkValue,
@@ -396,6 +396,7 @@ addDataButton.addEventListener("click", () => {
     };
   };
   console.log(dataOutput);
+  state.data.push(dataOutput);
   return
 });
 
