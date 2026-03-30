@@ -391,7 +391,7 @@ addDataButton.addEventListener("click", () => {
       dataOutput = {
         "Time": timeValue,
         "Drink": customDrinkValue,
-        "Caffeine": customDrinkCaffeineValue
+        "Caffeine": parseInt(customDrinkCaffeineValue)
       };
     } else if (!customDrinkNameValid && !customDrinkCaffeineValid) {
         ui.errorMessageContainer.textContent = "No custom drink info provided...";
@@ -414,9 +414,44 @@ addDataButton.addEventListener("click", () => {
   };
   console.log("Data entry:", dataOutput)
   console.log("Aggregate data:", state.data)
+  
+  renderDataTable(state.data, ui.drinkTableContainer)
   return
 });
 
 clearDataButton.addEventListener("click", () => {
-  state.data = []
+  state.data = [];
+  document.getElementById.innerHTML = "";
 });
+
+const renderDataTable = (arrayOfValueObjects, container) => {
+  const table = document.createElement("table");
+  table.id = "ValuesTable"
+
+  const lablesRow = document.createElement("tr");
+  const headingCellTime = document.createElement("th");
+  headingCellTime.textContent = "Time";
+  const headingCellDrink = document.createElement("th");
+  headingCellDrink.textContent = "Drink";
+  const headingCellCaffeine = document.createElement("th");
+  headingCellCaffeine.textContent = "Caffeine, mg";
+
+  tablesRow.append(headingCellTime, headingCellDrink, HeadingCellCaffeine);
+  table.append(tablesRow);
+
+  arrayOfValueObjects.forEach((entry) => {
+    const valuesRow = document.createElement("tr");
+    const timeCell = document.createElement("td");
+    timeCell.textContent = arrayOfValueObjects[entry]["Time"];
+    const drinkCell = document.createElement("td");
+    drinkCell.textContent = arrayOfValueObjects[entry]["Drink"];
+    const caffeineCell = document.createElement("td");
+    caffeineCell.textContent = arrayOfValueObjects[entry]["Caffeine"];
+
+    valuesRow.append(timeCell, drinkCell, caffeineCell);
+    table.append(valuesRow);
+  });
+
+  container.innerHTML = "";
+  container.appendChild(table);
+};
