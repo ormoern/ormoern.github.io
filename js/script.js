@@ -14,7 +14,7 @@ const state = {
     "metabolismSpeedDisplay": "",
     "metabolismSpeed": 0
   },
-  customDrink: False,
+  customDrink: false,
   inputFields: [
     "bodyMassBox",
     "metabolismSpeedSelect",
@@ -250,17 +250,17 @@ function renderUI() {
 const checkInputText = (textInput, inputType) => {
   const regex = /[^A-Za-z0-9]/; //used to check for special characters, optional
   let errorMessage = "";
-  let inputValid = False;
+  let inputValid = false;
 
   if (textInput.length === 0 || textInput === null) {
     errorType = "Empty," + inputType;
     errorMessage = state.data.errorMessages[errorType];
     ui.errorMessageContainer.textContent = errorMessage;
 
-    inputValid = False;
+    inputValid = false;
     return inputValid
   } else {
-    inputValid = True
+    inputValid = true
     return inputValid
   };
 };
@@ -268,24 +268,24 @@ const checkInputText = (textInput, inputType) => {
 const checkInputNumber = (numberInput, inputType) => {
   const regex = /[^0-9]/; //used to check for special characters or letters
   let errorMessage = "";
-  let inputValid = False;
+  let inputValid = false;
 
   if (numberInput.length === 0 || textInput === null) {
     errorType = "Empty," + inputType;
     errorMessage = state.data.errorMessages[errorType];
     ui.errorMessageContainer.textContent = errorMessage;
 
-    inputValid = False;
+    inputValid = false;
     return inputValid
   } else if (regex.test(numberInput)) {
     errorType = "Symbols," + inputType;
     errorMessage = state.data.errorMessages[errorType];
     ui.errorMessageContainer.textContent = errorMessage;
 
-    inputValid = False;
+    inputValid = false;
     return inputValid
   } else {
-    inputValid = True;
+    inputValid = true;
     return inputValid
   };
 };
@@ -314,9 +314,9 @@ const presetDrink = ui.presetDrink;
 const customDrinkCheckBox = ui.customDrinkCheckBox;
 customDrinkCheckBox.addEventListener("change", () => {
   if (customDrinkCheckBox.checked) {
-    data.customDrink = True;
+    data.customDrink = true;
   } else {
-    data.customDrink = False;
+    data.customDrink = false;
   };
 });
 
