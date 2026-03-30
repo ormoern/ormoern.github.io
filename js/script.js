@@ -384,7 +384,7 @@ addDataButton.addEventListener("click", () => {
     };
   } else {
     let presetDrinkValue = presetDrink.value;
-    let presetDrinkCaffeineValue = state.presetDrinks(presetDrink);
+    let presetDrinkCaffeineValue = state.presetDrinks[presetDrink];
     dataOutput = {
       timeValue,
       presetDrinkValue,
