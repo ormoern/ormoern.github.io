@@ -319,7 +319,7 @@ const ui = renderUI();
 // access input fields
 const bodyMass = ui.bodyMass;
 const metabolismSpeed = ui.metabolismSpeed;
-const inputTime = ui.inputTime;
+const timeInput = ui.timeInputBox;
 const customDrinkName = ui.customDrinkName;
 const customDrinkCaffeine = ui.customDrinkCaffeine;
 const presetDrink = ui.presetDrink;
@@ -364,9 +364,9 @@ userInfoSaveButton.addEventListener("click", () => {
 
 addDataButton.addEventListener("click", () => {
   let dataOutput = {}
-  if (inputTime.value != "" || inputTime.value != null) {
-    let timeValue = timeToDecInt(inputTime.value);
-  } else if (inputTime.value === "" || inputTime.value === null)  {
+  if (timeInput.value != "" || timeInput.value != null) {
+    let timeValue = timeToDecInt(timeInput.value);
+  } else if (timeInput.value === "" || timeInput.value === null)  {
     ui.errorMessageContainer.textContent = "Time not provided."
   };
 
