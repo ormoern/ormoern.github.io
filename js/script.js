@@ -364,10 +364,10 @@ userInfoSaveButton.addEventListener("click", () => {
 
 addDataButton.addEventListener("click", () => {
   let dataOutput = {}
-  if (timeInput.value != "" || timeInput.value != null) {
-    let timeValue = timeToDecInt(timeInput.value);
-  } else if (timeInput.value === "" || timeInput.value === null)  {
+  if (!timeInput.value) {
     ui.errorMessageContainer.textContent = "Time not provided."
+  } else {
+    let timeValue = timeToDecInt(timeInput.value);
   };
 
   if (state.customDrink) {
