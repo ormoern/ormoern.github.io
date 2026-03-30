@@ -275,7 +275,7 @@ const checkInputText = (textInput, inputType) => {
     inputValid = true
     return inputValid
   };
-  setTimeout = (() => {
+  setTimeout(() => {
     ui.errorMessageContainer.textContent = "";
   }, 5000);
 };
@@ -305,7 +305,7 @@ const checkInputNumber = (numberInput, inputType) => {
     return inputValid
   };
 
-  setTimeout = (() => {
+  setTimeout(() => {
     ui.errorMessageContainer.textContent = "";
   }, 5000);
 };
@@ -375,7 +375,7 @@ addDataButton.addEventListener("click", () => {
 
   if (!timeInput.value) {
     ui.errorMessageContainer.textContent = "Time not provided."
-    setTimeout = (() => {
+    setTimeout(() => {
       ui.errorMessageContainer.textContent = "";
     }, 5000);
   } else {
