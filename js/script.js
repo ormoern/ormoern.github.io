@@ -269,8 +269,8 @@ const renderDataTable = (arrayOfValueObjects, container) => {
   const headingCellCaffeine = document.createElement("th");
   headingCellCaffeine.textContent = "Caffeine, mg";
 
-  tablesRow.append(headingCellTime, headingCellDrink, HeadingCellCaffeine);
-  table.append(tablesRow);
+  lablesRow.append(headingCellTime, headingCellDrink, HeadingCellCaffeine);
+  table.append(lablesRow);
 
   arrayOfValueObjects.forEach((entry) => {
     const valuesRow = document.createElement("tr");
