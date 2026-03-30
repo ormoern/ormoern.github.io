@@ -266,7 +266,7 @@ const checkInputText = (textInput, inputType) => {
 
   if (textInput.length === 0 || textInput === null) {
     errorType = "Empty," + inputType;
-    errorMessage = state.data.errorMessages[errorType];
+    errorMessage = state.errorMessages[errorType];
     ui.errorMessageContainer.textContent = errorMessage;
 
     inputValid = false;
@@ -285,14 +285,14 @@ const checkInputNumber = (numberInput, inputType) => {
 
   if (numberInput.length === 0 || numberInput === null) {
     errorType = "Empty," + inputType;
-    errorMessage = state.data.errorMessages[errorType];
+    errorMessage = state.errorMessages[errorType];
     ui.errorMessageContainer.textContent = errorMessage;
 
     inputValid = false;
     return inputValid
   } else if (regex.test(numberInput)) {
     errorType = "Symbols," + inputType;
-    errorMessage = state.data.errorMessages[errorType];
+    errorMessage = state.errorMessages[errorType];
     ui.errorMessageContainer.textContent = errorMessage;
 
     inputValid = false;
