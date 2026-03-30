@@ -261,28 +261,25 @@ const renderDataTable = (arrayOfValueObjects, container) => {
   const table = document.createElement("table");
   table.id = "ValuesTable"
 
-  const lablesRow = document.createElement("tr");
-  const headingCellTime = document.createElement("th");
-  headingCellTime.textContent = "Time";
-  const headingCellDrink = document.createElement("th");
-  headingCellDrink.textContent = "Drink";
-  const headingCellCaffeine = document.createElement("th");
-  headingCellCaffeine.textContent = "Caffeine, mg";
+  keyLabels = Object.keys(arrayOfValueObject[0]);
+  const labelsRow = document.createElement("tr");
 
-  lablesRow.append(headingCellTime, headingCellDrink, headingCellCaffeine);
-  table.append(lablesRow);
+  keyLabels.forEach((key) => {
+    const headingCell = document.createElement("th");
+    headingCell.textContent = keyLabels[key];
+    labelsRow.append(headingCell);
+  });
+  table.append(labelsRow);
 
   arrayOfValueObjects.forEach((entry) => {
     const valuesRow = document.createElement("tr");
-    const timeCell = document.createElement("td");
-    timeCell.textContent = arrayOfValueObjects[entry]["Time"];
-    const drinkCell = document.createElement("td");
-    drinkCell.textContent = arrayOfValueObjects[entry]["Drink"];
-    const caffeineCell = document.createElement("td");
-    caffeineCell.textContent = arrayOfValueObjects[entry]["Caffeine"];
-
-    valuesRow.append(timeCell, drinkCell, caffeineCell);
-    table.append(valuesRow);
+    const valuesArr = Object.values(arrayOfValueObjects[entry]);
+    valuesArr.forEach((value) => {
+      const dataCell = document.createElement("td");
+      dataCell.textContent = value;
+      valuesRow.append(dataCell);
+    });
+    table.append(valuesRow)
   });
 
   container.innerHTML = "";
@@ -303,14 +300,15 @@ const checkInputText = (textInput, inputType) => {
     ui.errorMessageContainer.textContent = errorMessage;
 
     inputValid = false;
+
+    setTimeout(() => {
+      ui.errorMessageContainer.textContent = "";
+    }, 5000);
     return inputValid
   } else {
     inputValid = true
     return inputValid
   };
-  setTimeout(() => {
-    ui.errorMessageContainer.textContent = "";
-  }, 5000);
 };
 
 const checkInputNumber = (numberInput, inputType) => {
@@ -424,7 +422,7 @@ addDataButton.addEventListener("click", () => {
       dataOutput = {
         "Time": timeValue,
         "Drink": customDrinkValue,
-        "Caffeine": parseInt(customDrinkCaffeineValue)
+        "Caffeine, mg": parseInt(customDrinkCaffeineValue)
       };
     } else if (!customDrinkNameValid && !customDrinkCaffeineValid) {
         ui.errorMessageContainer.textContent = "No custom drink info provided...";
@@ -438,7 +436,7 @@ addDataButton.addEventListener("click", () => {
     dataOutput = {
       "Time": timeValue,
       "Drink": presetDrinkValue,
-      "Caffeine": presetDrinkCaffeineValue
+      "Caffeine, mg": presetDrinkCaffeineValue
     };
   };
 
@@ -455,6 +453,6 @@ addDataButton.addEventListener("click", () => {
 
 clearDataButton.addEventListener("click", () => {
   state.data = [];
-  const valuesTable = document.getElementById("ValuesTable");
-  valuesTable.innerHTML = ""
+  const dataTable = document.getElementById("ValuesTable");
+  dataTable.innerHTML = ""
 });
