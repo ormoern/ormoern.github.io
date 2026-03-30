@@ -392,13 +392,13 @@ addDataButton.addEventListener("click", () => {
         timeValue,
         customDrinkValue,
         customDrinkCaffeineValue
-      } else {
+      };
+    } else {
         ui.errorMessageContainer.textContent = "No info provided...";
         setTimeout(() => {
           ui.errorMessageContainer.textContent = "";
         }, 5000);
-      }
-    };
+      };
   } else if (presetDrink && timeValue) {
     let presetDrinkValue = presetDrink.value;
     let presetDrinkCaffeineValue = state.presetDrinks[presetDrinkValue];
@@ -409,12 +409,12 @@ addDataButton.addEventListener("click", () => {
     };
   };
 
-  const isNotEmpty = obj => Object.keys(obj).length > 0;
+  const isNotEmpty = (obj) => { !Object.keys(obj).length > 0 };
 
   if isNotEmpty(dataOutput) {
     state.data.push(dataOutput);
   };
-  
+
   console.log("Aggregate data:", state.data)
   return
 });
