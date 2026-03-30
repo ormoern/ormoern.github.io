@@ -256,12 +256,16 @@ function renderUI() {
  }
 };
 
+// --- render UI ---
+
+const ui = renderUI();
+
 const renderDataTable = (arrayOfValueObjects, container) => {
   console.log("creating table")
   const table = document.createElement("table");
   table.id = "ValuesTable"
 
-  keyLabels = Object.keys(arrayOfValueObjects[0]);
+  const keyLabels = Object.keys(arrayOfValueObjects[0]);
   const labelsRow = document.createElement("tr");
 
   keyLabels.forEach((key) => {
@@ -276,7 +280,7 @@ const renderDataTable = (arrayOfValueObjects, container) => {
     const valuesArr = Object.values(arrayOfValueObjects[entry]);
     valuesArr.forEach((value) => {
       const dataCell = document.createElement("td");
-      dataCell.textContent = value;
+      dataCell.textContent = valuesArr[value];
       valuesRow.append(dataCell);
     });
     table.append(valuesRow)
@@ -349,10 +353,6 @@ const timeToDecInt = (timeInput) => {
   const timeDec = ((Math.round((hoursInt + (minutesInt / 60)) * 100)) / 100)
   return timeDec
 };
-
-// --- render UI ---
-
-const ui = renderUI();
 
 // --- RENDER GRAPH ---
 
