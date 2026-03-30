@@ -409,7 +409,7 @@ addDataButton.addEventListener("click", () => {
     };
   };
 
-  const isNotEmpty = (obj) => { !Object.keys(obj).length > 0 };
+  const isNotEmpty = (obj) => { !Object.keys(obj).length };
 
   if isNotEmpty(dataOutput) {
     state.data.push(dataOutput);
