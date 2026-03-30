@@ -247,7 +247,12 @@ function renderUI() {
     userInfoSaveButton, 
     addDataButton, 
     clearDataButton, 
-    showGraphButton
+    showGraphButton,
+    timeInputBox,
+    presetDrinkSelect,
+    customDrinkNameBox,
+    customDrinkCaffeineBox,
+    customDrinkCheckBox
  }
 };
 
@@ -322,6 +327,7 @@ const presetDrink = ui.presetDrink;
 // checkbox action
 const customDrinkCheckBox = ui.customDrinkCheckBox;
 const customDrink = state.customDrink;
+
 customDrinkCheckBox.addEventListener("change", () => {
   if (customDrinkCheckBox.checked) {
     customDrink = true;
