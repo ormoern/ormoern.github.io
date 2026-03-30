@@ -405,6 +405,7 @@ addDataButton.addEventListener("click", () => {
   };
   console.log(dataOutput);
   state.data.push(dataOutput);
+  console.log(`Aggregate data: ${state.data}`)
   return
 });
 
