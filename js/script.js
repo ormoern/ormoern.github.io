@@ -286,18 +286,18 @@ const checkInputNumber = (numberInput, inputType) => {
   let inputValid = false;
   let errorType = "";
 
-  if (numberInput.length === 0 || numberInput === null) {
+  if (numberInput.length === 0 || numberInput === null || numberInput < 0) {
     errorType = "Empty," + inputType;
     errorMessage = state.errorMessages[errorType];
     ui.errorMessageContainer.textContent = errorMessage;
-
+    console.log(errorMessage)
     inputValid = false;
     return inputValid
   } else if (regex.test(numberInput)) {
     errorType = "Symbols," + inputType;
     errorMessage = state.errorMessages[errorType];
     ui.errorMessageContainer.textContent = errorMessage;
-
+    console.log(errorMessage)
     inputValid = false;
     return inputValid
   } else {
