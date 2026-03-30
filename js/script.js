@@ -275,6 +275,9 @@ const checkInputText = (textInput, inputType) => {
     inputValid = true
     return inputValid
   };
+  setTimeout = (() => {
+    ui.errorMessageContainer.textContent = "";
+  }, 1000);
 };
 
 const checkInputNumber = (numberInput, inputType) => {
@@ -301,6 +304,10 @@ const checkInputNumber = (numberInput, inputType) => {
     inputValid = true;
     return inputValid
   };
+
+  setTimeout = (() => {
+    ui.errorMessageContainer.textContent = "";
+  }, 1000);
 };
 
 // --- DATA PARSING ---
