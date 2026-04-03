@@ -190,7 +190,7 @@ function renderUI() {
     actualDataContainer,
     drinkTableContainer
   );
-  actualDataSubContainer.append(
+  actualDataContainer.append(
     bodyMassContainer,
     metabolismSpeedContainer,
     currentCaffeineContainer
