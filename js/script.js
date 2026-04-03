@@ -275,12 +275,12 @@ const renderDataTable = (arrayOfValueObjects, container) => {
   });
   table.append(labelsRow);
 
-  arrayOfValueObjects.forEach((entry) => {
+  arrayOfValueObjects.forEach((entry, index) => {
     const valuesRow = document.createElement("tr");
-    const valuesArr = Object.values(arrayOfValueObjects[entry]);
+    const valuesArr = Object.values(arrayOfValueObjects[index]);
     valuesArr.forEach((value) => {
       const dataCell = document.createElement("td");
-      dataCell.textContent = valuesArr[value];
+      dataCell.textContent = value;
       valuesRow.append(dataCell);
     });
     table.append(valuesRow)
