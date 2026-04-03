@@ -42,7 +42,7 @@ const state = {
     "Medium": 5.7,
     "Low": 7.5
   },
-  defaultTableValues = [
+  defaultTableValues: [
     "Time",
     "Drink",
     "Caffeine"
