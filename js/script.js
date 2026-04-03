@@ -69,20 +69,20 @@ const tableWithDefaultValues = (tableValues, container) => {
   table.id = "ValuesTable"
 
   const labelsRow = document.createElement("tr");
-  let zeroValuesArr = []
+  let emptyValuesArr = []
 
-  tableValues.forEach((lable) => {
+  tableValues.forEach((label) => {
     const headingCell = document.createElement("th");
-    headingCell.textContent = tableValues[key];
+    headingCell.textContent = label;
     labelsRow.append(headingCell);
-    zeroValuesArr.push("")
+    emptyValuesArr.push("")
   });
 
   table.append(labelsRow);
 
   const valuesRow = document.createElement("tr");
 
-  zeroValuesArr.forEach((entry) => {
+  emptyValuesArr.forEach((entry) => {
     const dataCell = document.createElement("td");
     dataCell.textContent = entry;
     valuesRow.append(dataCell);
