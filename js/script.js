@@ -11,8 +11,9 @@ const state = {
   },
   userData: {
     "bodyMass": 0,
-    "metabolismSpeedDisplay": "",
-    "metabolismSpeed": 0
+    "metabolismSpeedDisplay": "Medium",
+    "metabolismSpeed": 0,
+    "currentCaffeineLevel": 0
   },
   customDrink: false,
   inputFields: [
@@ -40,7 +41,12 @@ const state = {
     "High": 3.5,
     "Medium": 5.7,
     "Low": 7.5
-  }
+  },
+  defaultTableValues = [
+    "Time",
+    "Drink",
+    "Caffeine"
+  ],
 };
 
 // --- HELPER FUNCTIONS ---
@@ -57,6 +63,66 @@ const createSelectOptions = (valueObject, selectElement) => {
 };
 
 // --- UI RENDERING ---
+
+const tableWithDefaultValues = (tableValues, container) => {
+  const table = document.createElement("table");
+  table.id = "ValuesTable"
+
+  const labelsRow = document.createElement("tr");
+  let zeroValuesArr = []
+
+  tableValues.forEach((key) => {
+    const headingCell = document.createElement("th");
+    headingCell.textContent = tableValues[key];
+    labelsRow.append(headingCell);
+    zeroValuesArr.push("")
+  });
+
+  table.append(labelsRow);
+
+  const valuesRow = document.createElement("tr");
+
+  zeroValuesArr.forEach((entry) => {
+    const dataCell = document.createElement("td");
+    dataCell.textContent = entry;
+    valuesRow.append(dataCell);
+  });
+
+  table.append(valuesRow)
+
+  container.innerHTML = "";
+  container.append(table);
+};
+
+const renderDataTable = (arrayOfValueObjects, container) => {
+  console.log("creating table")
+  const table = document.createElement("table");
+  table.id = "ValuesTable"
+
+  const keyLabels = Object.keys(arrayOfValueObjects[0]);
+  const labelsRow = document.createElement("tr");
+
+  keyLabels.forEach((key) => {
+    const headingCell = document.createElement("th");
+    headingCell.textContent = keyLabels[key];
+    labelsRow.append(headingCell);
+  });
+  table.append(labelsRow);
+
+  arrayOfValueObjects.forEach((entry, index) => {
+    const valuesRow = document.createElement("tr");
+    const valuesArr = Object.values(arrayOfValueObjects[index]);
+    valuesArr.forEach((value) => {
+      const dataCell = document.createElement("td");
+      dataCell.textContent = value;
+      valuesRow.append(dataCell);
+    });
+    table.append(valuesRow)
+  });
+
+  container.innerHTML = "";
+  container.append(table);
+};
 
 function renderUI() {
   // --- access main containers ---
@@ -81,6 +147,12 @@ function renderUI() {
   // data values sub-subcontainers
   const actualDataContainer = document.createElement("div");
   const drinkTableContainer = document.createElement("div");
+
+  // actualDataContainer subcontainers
+
+  const bodyMassContainer = document.createElement("div");
+  const metabolismSpeedContainer = document.createElement("div");
+  const currentCaffeineContainer = document.createElement("div");
   
   // --- assign classes and add to main containers ---
 
@@ -96,8 +168,11 @@ function renderUI() {
   graphContainer.classList.add("dataSubContainer")
 
   // assign classes to data value subcontainers
-  actualDataContainer.classList.add("dataSubSubContainer")
-  drinkTableContainer.classList.add("dataSubSubContainer")
+  actualDataContainer.classList.add("dataValuesSubContainer")
+  drinkTableContainer.classList.add("graphSubContainer")
+  bodyMassContainer.classList.add("actualDataSubContainer")
+  metabolismSpeedContainer.classList.add("actualDataSubContainer")
+  currentCaffeineContainer.classList.add("actualDataSubContainer")
 
   // add subcontainers to main containers
   inputContainer.append(
@@ -115,6 +190,18 @@ function renderUI() {
     actualDataContainer,
     drinkTableContainer
   );
+  actualDataSubContainer.append(
+    bodyMassContainer,
+    metabolismSpeedContainer,
+    currentCaffeineContainer
+  );
+
+  // default content of data containers
+
+  tableWithDefaultValues(state.data.defaultTableValues, drinkTableContainer);
+  bodyMassContainer.textContent = state.userData[bodyMass];
+  metabolismSpeedContainer.textContent = state.userData[metabolismSpeedDisplay];
+  currentCaffeineContainer.textContent = state.userData[currentCaffeineLevel];
 
   // --- create input elements and append to subcontainers ---
   // time and preset drink
@@ -260,36 +347,6 @@ function renderUI() {
 
 const ui = renderUI();
 
-const renderDataTable = (arrayOfValueObjects, container) => {
-  console.log("creating table")
-  const table = document.createElement("table");
-  table.id = "ValuesTable"
-
-  const keyLabels = Object.keys(arrayOfValueObjects[0]);
-  const labelsRow = document.createElement("tr");
-
-  keyLabels.forEach((key) => {
-    const headingCell = document.createElement("th");
-    headingCell.textContent = keyLabels[key];
-    labelsRow.append(headingCell);
-  });
-  table.append(labelsRow);
-
-  arrayOfValueObjects.forEach((entry, index) => {
-    const valuesRow = document.createElement("tr");
-    const valuesArr = Object.values(arrayOfValueObjects[index]);
-    valuesArr.forEach((value) => {
-      const dataCell = document.createElement("td");
-      dataCell.textContent = value;
-      valuesRow.append(dataCell);
-    });
-    table.append(valuesRow)
-  });
-
-  container.innerHTML = "";
-  container.append(table);
-};
-
 // --- ERROR HANDLING ---
 
 const checkInputText = (textInput, inputType) => {
@@ -416,7 +473,7 @@ addDataButton.addEventListener("click", () => {
       ui.errorMessageContainer.textContent = "";
     }, 5000);
   } else {
-    timeValue = timeToDecInt(timeInput.value);
+    timeValue = timeInput.value;
   };
 
   if (state.customDrink) {
