@@ -71,7 +71,7 @@ const tableWithDefaultValues = (tableValues, container) => {
   const labelsRow = document.createElement("tr");
   let zeroValuesArr = []
 
-  tableValues.forEach((key) => {
+  tableValues.forEach((lable) => {
     const headingCell = document.createElement("th");
     headingCell.textContent = tableValues[key];
     labelsRow.append(headingCell);
@@ -198,7 +198,7 @@ function renderUI() {
 
   // default content of data containers
 
-  tableWithDefaultValues(state.data.defaultTableValues, drinkTableContainer);
+  tableWithDefaultValues(state.defaultTableValues, drinkTableContainer);
   bodyMassContainer.textContent = state.userData[bodyMass];
   metabolismSpeedContainer.textContent = state.userData[metabolismSpeedDisplay];
   currentCaffeineContainer.textContent = state.userData[currentCaffeineLevel];
