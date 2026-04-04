@@ -45,7 +45,7 @@ const state = {
   defaultTableValues: [
     "Time",
     "Drink",
-    "Caffeine"
+    "Caffeine, mg"
   ],
 };
 
@@ -422,7 +422,10 @@ const timeToDecInt = (timeInput) => {
 
 // containers
 
-const drinkTableContainer = ui.drinkTableContainer
+const drinkTableContainer = ui.drinkTableContainer;
+const bodyMassContainer = ui.bodyMassContainer;
+const metabolismSpeedContainer = ui.metabolismSpeedContainer;
+const currentCaffeineContainer = ui.currentCaffeineContainer;
 
 // --- USER ACTIONS ---
 // access input fields
@@ -441,10 +444,12 @@ customDrinkCheckBox.addEventListener("change", () => {
     state.customDrink = true;
     customDrinkName.disabled = false;
     customDrinkCaffeine.disabled = false;
+    presetDrink.disabled = true;
   } else {
     state.customDrink = false;
     customDrinkName.disabled = true;
     customDrinkCaffeine.disabled = true;
+    presetDrink.disabled = false;
   };
 
 });
@@ -455,9 +460,6 @@ const addDataButton = ui.addDataButton;
 const clearDataButton = ui.clearDataButton;
 const showGraphButton = ui.showGraphButton;
 const userInfoSaveButton = ui.userInfoSaveButton;
-
-const undefinedError = "Undefined error..."
-let errorMessage = ""
 
 userInfoSaveButton.addEventListener("click", () => {
   let bodyMassValue = bodyMass.value;
