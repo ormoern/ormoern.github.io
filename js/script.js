@@ -47,6 +47,10 @@ const state = {
     "Drink",
     "Caffeine, mg"
   ],
+  graphValues: {
+    "timePeriodHH": 30,
+    "points": 60 * timePeriodHH // 60 points per hour
+  }
 };
 
 // --- HELPER FUNCTIONS ---
@@ -416,10 +420,119 @@ const timeToDecInt = (timeInput) => {
 
 // --- RENDER GRAPH ---
 
-/*const renderGraph = (arrayOfValueObjects, container) => {
+/* const createXValueArray = (start, end, pointsAmount) => {
+  const step = (end - start) / (pointsAmount - 1);
+  const xArray = [];
 
-};*/
+  for (let i = 0; i < pointsAmount; i++) {
+    xArray.push(start + (i * step))
+  };
 
+  return xArray
+};
+
+const createSegments = (intakeData, userData) => {
+  let graphSegments = []
+  let intakeDataFormatted = [];
+  let timeArray = [];
+  let smallestTime = 100;
+  const caffeineVolumeOfDistribution = 0.6;
+
+  const bodyMass = userData[bodyMass];
+  const metabolismSpeed = userData[metabolismSpeed];
+
+  intakeData.forEach((entry) => { // format data
+    let valuePair = [];
+    valuePair.push(timeToDecInt(entry["Time"]));
+    timeArray.push(timeToDecInt(entry["Time"]));
+    valuePair.push(entry["Caffeine, mg"]);
+    intakeDataFormatted.push(valuePair);
+    });
+
+  timeArray.forEach((time) => { // find the time of the first intake
+    if (time < smallestTime) {
+      smallestTime = time;
+    };
+  });
+
+  const graphStartX = smallestTime - 1; // start graph one hour before first intake
+
+
+  let currentCaffeineConcentration = 0;
+  let decayStart = 0;
+
+  const intakeArrayLength = intakeDataFormatted.length;
+
+  const linear = (startX, startY, endX, endY) => x =>
+    startY + ((endY - startY) / (endX - startX)) * (x - startX);
+
+  const exponentialDecay = (startX, startY) => x =>
+    startY * (0.5 ** ((x - startX)/metabolismSpeed));
+
+
+  intakeDataFormatted.forEach((entry, index) => {
+    let intakeTime = entry[0];
+    let intakeCaffeine = entry[1];
+
+    let startX = intakeTime;
+    let startY = currentCaffeineConcentration;
+
+    currentCaffeineConcentration += (intakeCaffeine / (bodyMass * caffeineVolumeOfDistribution));
+    decayStart = intakeTime + 0.75; // 45min absorption
+    
+    let endX = decayStart;
+    let endY = currentCaffeineConcentration;
+
+    let graphSegmentAbsorption;
+    let graphSegmentDecay;
+
+    if (index == 0) {
+      graphSegmentAbsorption = {
+        fn: linear(startX, startY, endX, endY),
+        min: startX - 1,
+        max: endX,
+      }
+     } else {
+      graphSegmentAbsorption = {
+        fn: linear(startX, startY, endX, endY),
+        min: startX,
+        max: endX,
+      };
+    };
+
+    if ((intakeDataFormatted.length - 1) == index) {
+      graphSegmentDecay = {
+        fn: exponentialDecay(endX, endY),
+        min: endX,
+        max: state.graphValues[timePeriodHH],
+      };
+    } else {
+      graphSegmentDecay = {
+        fn: exponentialDecay(endX, endY),
+        min: endX
+        max: intakeDataFormatted[index+1][0],
+      };
+    };
+
+    graphSegments.push(graphSegmentAbsorption, graphSegmentDecay)
+  });
+
+  return graphSegments
+};
+
+const createSegmentData = (graphSegments) => {
+  const xs = createXValueArray(smallestTime, state.graphValues[timePeriodHH], state.graphValues[points]);
+  const segmentData = xs.map(x => {
+    let y = null;
+    graphSegments.forEach((seg) => {
+      if (x >= seg.min && x <= seg.max) {
+        y = seg.fn(x);
+      }
+    });
+    return { x, y }
+  });
+};
+*/
 // containers
 
 const drinkTableContainer = ui.drinkTableContainer;
