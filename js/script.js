@@ -201,7 +201,7 @@ function renderUI() {
   tableWithDefaultValues(state.defaultTableValues, drinkTableContainer);
   bodyMassContainer.textContent = state.userData["bodyMass"];
   metabolismSpeedContainer.textContent = state.userData["metabolismSpeedDisplay"];
-  currentCaffeineContainer.textContent = state.userData["currentCaffeineLevel]";
+  currentCaffeineContainer.textContent = state.userData["currentCaffeineLevel"];
 
   // --- create input elements and append to subcontainers ---
   // time and preset drink
