@@ -491,7 +491,7 @@ const createXYArray = (intakeData, userData) => {
 };
 
 const renderGraph = (container) => {
-  const canvasContainer = createElement("canvas");
+  const canvasContainer = document.createElement("canvas");
   canvasContainer.id = "caffeineChart";
   container.append(canvasContainer);
   const data = createYArray(state.data, state.userData)
