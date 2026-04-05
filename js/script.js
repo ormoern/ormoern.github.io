@@ -444,7 +444,7 @@ const renderGraph = (container) => {
 // --- render UI ---
 
 const ui = renderUI();
-renderGraph(ui.graphContainer)
+renderGraph(ui.graphContainer);
 
 // --- ERROR HANDLING ---
 
