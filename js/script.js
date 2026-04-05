@@ -49,7 +49,7 @@ const state = {
   ],
   graphValues: {
     "timePeriodHH": 30,
-    "points": 60 * state.graphValues["timePeriodHH"], // 60 points per hour
+    "points": 60 * 30, // 60 points per hour
   },
 };
 
@@ -434,7 +434,6 @@ const parseIntakeData = (intakeData) => {
   console.log("Intake data parsed:" + parsedIntakeData);
   return parsedIntakeData
 };
-
 const createXValueArray = (start, end, pointsAmount) => {
   console.log("Creating array of X values.");
   const step = (end - start) / (pointsAmount - 1);
@@ -482,8 +481,13 @@ const createXYArray = (intakeData, userData) => {
     }, 0);
   });
   console.log(totalConcentration)
-  return totalConcentration
+
+  const xyPairs = xs.map((x, i) => [x, totalConcentration[i]]);
+
+  return xyPairs
 };
+
+
 
 // containers
 
