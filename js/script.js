@@ -49,8 +49,8 @@ const state = {
   ],
   graphValues: {
     "timePeriodHH": 30,
-    "points": 60 * timePeriodHH // 60 points per hour
-  }
+    "points": 60 * state.graphValues["timePeriodHH"], // 60 points per hour
+  },
 };
 
 // --- HELPER FUNCTIONS ---
@@ -420,7 +420,7 @@ const timeToDecInt = (timeInput) => {
 
 // --- RENDER GRAPH ---
 
-/* const createXValueArray = (start, end, pointsAmount) => {
+const createXValueArray = (start, end, pointsAmount) => {
   const step = (end - start) / (pointsAmount - 1);
   const xArray = [];
 
@@ -431,23 +431,18 @@ const timeToDecInt = (timeInput) => {
   return xArray
 };
 
-const createSegments = (intakeData, userData) => {
-  let graphSegments = []
-  let intakeDataFormatted = [];
+const parseIntakeData = (intakeData) => {
+  let intakeDataParsed = [];
   let timeArray = [];
   let smallestTime = 100;
-  const caffeineVolumeOfDistribution = 0.6;
-
-  const bodyMass = userData[bodyMass];
-  const metabolismSpeed = userData[metabolismSpeed];
 
   intakeData.forEach((entry) => { // format data
     let valuePair = [];
     valuePair.push(timeToDecInt(entry["Time"]));
     timeArray.push(timeToDecInt(entry["Time"]));
     valuePair.push(entry["Caffeine, mg"]);
-    intakeDataFormatted.push(valuePair);
-    });
+    intakeDataParsed.push(valuePair);
+  });
 
   timeArray.forEach((time) => { // find the time of the first intake
     if (time < smallestTime) {
@@ -455,13 +450,25 @@ const createSegments = (intakeData, userData) => {
     };
   });
 
-  const graphStartX = smallestTime - 1; // start graph one hour before first intake
+  return {
+    intakeDataParsed,
+    smallestTime
+  }
+}
 
+const createSegments = (intakeData, userData) => {
+  const parsedData = parseIntakeData(intakeData);
+  const parsedIntakeData = parsedData.intakeDataParsed;
+  const smallestTime = parsedData.smallestTime;
+
+  let graphSegments = [];
+  const caffeineVolumeOfDistribution = 0.6;
+
+  const bodyMass = userData[bodyMass];
+  const metabolismSpeed = userData[metabolismSpeed];
 
   let currentCaffeineConcentration = 0;
   let decayStart = 0;
-
-  const intakeArrayLength = intakeDataFormatted.length;
 
   const linear = (startX, startY, endX, endY) => x =>
     startY + ((endY - startY) / (endX - startX)) * (x - startX);
@@ -509,7 +516,7 @@ const createSegments = (intakeData, userData) => {
     } else {
       graphSegmentDecay = {
         fn: exponentialDecay(endX, endY),
-        min: endX
+        min: endX,
         max: intakeDataFormatted[index+1][0],
       };
     };
@@ -517,22 +524,44 @@ const createSegments = (intakeData, userData) => {
     graphSegments.push(graphSegmentAbsorption, graphSegmentDecay)
   });
 
-  return graphSegments
+  return {
+    graphSegments,
+    smallestTime
+  }
 };
 
-const createSegmentData = (graphSegments) => {
-  const xs = createXValueArray(smallestTime, state.graphValues[timePeriodHH], state.graphValues[points]);
-  const segmentData = xs.map(x => {
-    let y = null;
-    graphSegments.forEach((seg) => {
-      if (x >= seg.min && x <= seg.max) {
-        y = seg.fn(x);
-      }
-    });
-    return { x, y }
+const createSegmentData = (graphSegments, start, end, points) => {
+  //const xs = createXValueArray(smallestTime, state.graphValues[timePeriodHH], state.graphValues[points]);
+  const xs = createXValueArray(start, end, points); // array of x values created with function createXValueArray
+  const segmentData = xs.map(x => { // run function for every x
+    const seg = graphSegments.find(seg =>  // find the first segment in graphSegments that fits 
+      x >= seg.min && x <= seg.max  // these conditions
+    );
+    return {  // return pairs of values x and calculated y for a function in segments fn with passed x
+      x,
+      y: seg ? seg.fn(x) : null // if seg exists compute y, else null
+    };
   });
+  return segmentData
 };
-*/
+
+const createXYarray = (intakeData, userData) => {
+  const userData = state.userData;
+  const intakeData = state.data;
+
+  const createSegments = createSegments(intakeData, userData);
+  const graphStart = createSegments.smallestTime;
+  const graphSegments = createSegments.graphSegments;
+  
+  const graphEnd = state.graphValues["timePeriodHH"];
+  const graphPoints = state.graphValues["points"];
+
+  const graphValues = createSegmentData(graphSegments, graphStart, graphEnd, graphPoints);
+
+  return graphValues
+};
+
+
 // containers
 
 const drinkTableContainer = ui.drinkTableContainer;
