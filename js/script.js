@@ -616,7 +616,7 @@ addDataButton.addEventListener("click", () => {
   console.log("Data entry:", dataOutput)
   console.log("Aggregate data:", state.data)
 
-  state.chartData = createYArray(state.data, state.userData)
+  state.chartData = createXYArray(state.data, state.userData)
 
   caffeineChart.data.datasets[0].data = state.chartData.totalConcentration;
   caffeineChart.data.labels = state.chartData.timePoints;
