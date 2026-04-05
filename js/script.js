@@ -458,7 +458,7 @@ const intakeContribution = (time, intakeTime, intakeConcentration, absorptionTim
     return (intakeConcentration * (0.5 ** ((time - (intakeTime + absorptionTime)) / metabolismSpeed)));
   }
 };
-const createXYArray = (intakeData, userData) => {
+const createYArray = (intakeData, userData) => {
   const parsedIntakeData = parseIntakeData(intakeData);
   const bodyMass = userData["bodyMass"];
   const metabolismSpeed = userData["metabolismSpeed"];
@@ -482,12 +482,27 @@ const createXYArray = (intakeData, userData) => {
   });
   console.log(totalConcentration)
 
-  const xyPairs = xs.map((x, i) => [x, totalConcentration[i]]);
+  //const xyPairs = xs.map((x, i) => [x, totalConcentration[i]]);
 
-  return xyPairs
+  return totalConcentration
 };
 
+const renderGraph = (container) => {
+  const canvasContainer = createElement("canvas");
+  canvasContainer.id = "caffeineChart";
+  container.append(canvasContainer)
 
+  new Chart(caffeineChart, {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'Caffeine concentration, mg',
+        data: createYArray(state.data, state.userData),
+        borderWidth: 1
+      }]
+    },
+  });
+};
 
 // containers
 
@@ -603,8 +618,8 @@ clearDataButton.addEventListener("click", () => {
   tableWithDefaultValues(state.defaultTableValues, drinkTableContainer);
 });
 
-/* showGraphButton.addEventListener("click", () => {
+showGraphButton.addEventListener("click", () => {
   const graphContainer = ui.graphContainer;
   graphContainer.innerHTML = "";
-  renderGraph(state.data, graphContainer);
-}); */
+  renderGraph(graphContainer);
+});
