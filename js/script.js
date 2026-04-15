@@ -357,6 +357,8 @@ function renderUI() {
   const customDrinkContainer = document.createElement("div");
   const userInfoContainer = document.createElement("div");
   const buttonsContainer = document.createElement("div");
+
+  const inputContainers = document.createElement("div");
   
   // data present
   const dataValuesContainer = document.createElement("div");
@@ -375,11 +377,14 @@ function renderUI() {
   // --- assign classes and add to main containers ---
 
   // assign classes to data input subcontainers
-  presetDrinkContainer.classList.add("inputSubContainer");
-  customDrinkContainer.classList.add("inputSubContainer");
-  userInfoContainer.classList.add("inputSubContainer");
-  buttonsContainer.classList.add("inputSubContainer");
-  errorMessageContainer.classList.add("inputSubContainer");
+  presetDrinkContainer.classList.add("inputSubSubContainer");
+  customDrinkContainer.classList.add("inputSubSubContainer");
+  userInfoContainer.classList.add("inputSubSubContainer");
+  errorMessageContainer.classList.add("inputSubSubContainer");
+
+  errorMessageContainer.id = "errorMessageContainer";
+
+  inputContainers.classList.add("inputSubContainer")
 
   // assign classes to data presenting subcontainers
   dataValuesContainer.classList.add("dataSubContainer")
@@ -395,10 +400,13 @@ function renderUI() {
   // add subcontainers to main containers
   inputContainer.append(
     errorMessageContainer,
+    inputContainers,
+    buttonsContainer
+  );
+  inputContainers.append(
     presetDrinkContainer, 
     customDrinkContainer, 
     userInfoContainer, 
-    buttonsContainer
   );
   dataContainer.append(
     actualDataContainer, 
@@ -529,17 +537,10 @@ function renderUI() {
     id: "clearDataButton",
     textContent: "Clear data"
   });
-  const showGraphButton = document.createElement("button");
-  Object.assign(showGraphButton, {
-    name: "showGraph",
-    id: "showGraphButton",
-    textContent: "Show graph"
-  }); 
 
   buttonsContainer.append(
     addDataButton, 
     clearDataButton,
-    showGraphButton
   );
 
   return { 
