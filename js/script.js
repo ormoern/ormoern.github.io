@@ -6,6 +6,125 @@ rgb(255, 248, 232)
 rgb(223, 224, 223)
 
 */
+// --- HELPER FUNCTIONS ---
+
+// create option values for select input type
+const createSelectOptions = (valueObject, selectElement) => {
+  const objectKeys = Object.keys(valueObject)
+  objectKeys.forEach((item, index) => {
+    const option = document.createElement("option");
+    option.value = item;
+    option.textContent = item;
+    selectElement.append(option);
+  });
+};
+
+// --- DATA PARSING ---
+
+const roundResult = (result) => {
+    return (Math.round(result * 100)) / 100;
+};
+
+const getCurrentTimeInDec = () => {
+    const now = new Date();
+    const minutes = (now.getMinutes() / 60);
+
+    return now.getHours() + roundResult(minutes);
+};
+
+const formatTime = (time) => {
+    const timeTotal = Math.round(time * 60);
+
+    let hours = Math.floor(timeTotal / 60);
+
+    /*minutes = minutes >= 0.98 && minutes < 1 ? 0 :
+    minutes >= 0.0 && minutes < 0.1 ? 0 :
+    (Math.round(minutes * 60));
+    console.log(`minutes int: ` + minutes);
+    const minutesStr = minutes === 0 ? "00" :
+        minutes < 10 ? "0" + minutes :
+        minutes;*/
+    
+    const hoursStr = hours < 10 ? "0" + hours :
+        hours > 23 && hours < 33 ? "0" + hours % 24 :
+        hours > 33 ? hours % 24 :
+        hours;
+
+  return hoursStr
+
+};
+
+const timeToDecInt = (timeInput) => {
+  const hoursInt = parseInt(timeInput.slice(0, 2));
+  const minutesInt = parseInt(timeInput.slice(-2));
+  const timeDec = ((Math.round((hoursInt + (minutesInt / 60)) * 100)) / 100)
+  return timeDec
+};
+
+const findYValue = (xyArray, time) => {
+  for (const entry of xyArray) {
+    if (entry[0] === time) {
+      return entry[1]
+    };
+  };
+};
+
+// --- ERROR HANDLING ---
+
+const checkInputText = (textInput, inputType) => {
+  const regex = /[^A-Za-z0-9]/; //used to check for special characters, optional
+  let errorMessage = "";
+  let inputValid = false;
+  let errorType = "";
+
+  if (textInput.length === 0 || textInput === null) {
+    errorType = "Empty," + inputType;
+    errorMessage = state.errorMessages[errorType];
+    ui.errorMessageContainer.textContent = errorMessage;
+
+    inputValid = false;
+
+    setTimeout(async () => {
+      ui.errorMessageContainer.textContent = "";
+    }, 5000);
+    return inputValid
+  } else {
+    inputValid = true
+    return inputValid
+  };
+};
+
+const checkInputNumber = (numberInput, inputType) => {
+  const regex = /[^0-9]/; //used to check for special characters or letters
+  let errorMessage = "";
+  let inputValid = false;
+  let errorType = "";
+
+  if (numberInput.length === 0 || numberInput === null || numberInput < 0) {
+    errorType = "Empty," + inputType;
+    errorMessage = state.errorMessages[errorType];
+    ui.errorMessageContainer.textContent = errorMessage;
+    setTimeout(() => {
+      ui.errorMessageContainer.textContent = "";
+    }, 5000);
+    console.log(errorMessage)
+    inputValid = false;
+    return inputValid
+  } else if (regex.test(numberInput)) {
+    errorType = "Symbols," + inputType;
+    errorMessage = state.errorMessages[errorType];
+    ui.errorMessageContainer.textContent = errorMessage;
+    setTimeout(() => {
+      ui.errorMessageContainer.textContent = "";
+    }, 5000);
+    console.log(errorMessage)
+    inputValid = false;
+    return inputValid
+  } else {
+    inputValid = true;
+    return inputValid
+  };
+};
 
 // --- GLOBAL STATE VALUES ---
 const state = {
@@ -67,6 +186,7 @@ const state = {
       data: [],
       cubicInterpolationMode: "monotone",
       fill: true,
+      /*backgroundColor: 'rgba(154, 115, 38, 0.5)'*/
       backgroundColor: (context) => {
         const chart = context.chart;
         const { ctx, chartArea } = chart;
@@ -82,8 +202,8 @@ const state = {
           chartArea.top
         );
 
-        gradient.addColorStop(1, 'rgb(167, 141, 101)');
-        gradient.addColorStop(0, 'rgba(154, 115, 38, 0.8)');
+        gradient.addColorStop(1, 'rgba(154, 115, 38, 0.4)');
+        gradient.addColorStop(0, 'rgba(154, 115, 38, 0)');
 
         return gradient;
       }
@@ -102,6 +222,9 @@ const state = {
         },
       },
     },
+    interaction: {
+      mode: null,
+    },
     elements: {
       line: {
         borderCapStyle: 'round',
@@ -116,8 +239,30 @@ const state = {
     },
     scales: {
       x: {
+        ticks: {
+          type: 'linear',
+          callback: function(val, index) {
+            const newValue = this.getLabelForValue(val);
+            console.log(`index:` + index)
+            const returnValue = index % 3 === 0 ? formatTime(newValue) :
+            ""
+            return returnValue
+          },
+          color: 'rgb(102, 76, 25)',
+        },
+        grid: {
+          display: false,
+        }
       },
       y: {
+        ticks: {
+          type: 'linear',
+          stepSize: 1,
+          color: 'rgb(102, 76, 25)',
+        },
+        grid: {
+          color: 'rgb(223, 224, 223)',
+        },
       },
     },
     plugins: {
@@ -125,35 +270,15 @@ const state = {
         enabled: true,
         algorithm: 'lttb',
       },
+      legend: {
+        display: false,
+      }
     }
   },
 };
 
 let caffeineChart;
 
-// --- HELPER FUNCTIONS ---
-
-// create option values for select input type
-const createSelectOptions = (valueObject, selectElement) => {
-  const objectKeys = Object.keys(valueObject)
-  objectKeys.forEach((item, index) => {
-    const option = document.createElement("option");
-    option.value = item;
-    option.textContent = item;
-    selectElement.append(option);
-  });
-};
-
-const roundResult = (result) => {
-    return (Math.round(result * 100)) / 100;
-};
-
-const getCurrentTimeInDec = () => {
-    const now = new Date();
-    const minutes = (now.getMinutes() / 60);
-
-    return now.getHours() + roundResult(minutes);
-};
 
 // --- UI RENDERING ---
 
@@ -262,7 +387,7 @@ function renderUI() {
 
   // assign classes to data value subcontainers
   actualDataContainer.classList.add("dataValuesSubContainer")
-  drinkTableContainer.classList.add("graphSubContainer")
+  drinkTableContainer.classList.add("dataValuesSubContainer")
   bodyMassContainer.classList.add("actualDataSubContainer")
   metabolismSpeedContainer.classList.add("actualDataSubContainer")
   currentCaffeineContainer.classList.add("actualDataSubContainer")
@@ -276,12 +401,12 @@ function renderUI() {
     buttonsContainer
   );
   dataContainer.append(
-    dataValuesContainer, 
-    graphContainer
+    actualDataContainer, 
+    dataValuesContainer
   );
   dataValuesContainer.append(
-    actualDataContainer,
-    drinkTableContainer
+    graphContainer,
+    drinkTableContainer,
   );
   actualDataContainer.append(
     bodyMassContainer,
@@ -344,13 +469,19 @@ function renderUI() {
   Object.assign(customDrinkCheckBox, {
     type: "checkbox",
     name: "customDrink",
-    id: "customDrinkCheckbox"
+    id: "customDrinkCheckbox",
   });
+  const containerForCheckbox = document.createElement("label");
+    Object.assign(containerForCheckbox, {
+    for: "customDrinkCheckbox",
+  });
+  containerForCheckbox.innerHTML = "Choose custom drink";
+  containerForCheckbox.append(customDrinkCheckBox);
 
   customDrinkContainer.append(
-    customDrinkCheckBox, 
     customDrinkNameBox, 
-    customDrinkCaffeineBox
+    customDrinkCaffeineBox,
+    containerForCheckbox
   );
 
   // user info
@@ -484,7 +615,7 @@ const createXYArray = (intakeData, userData) => {
   const bodyMass = userData["bodyMass"];
   const metabolismSpeed = userData["metabolismSpeed"];
 
-  const graphStart = parsedIntakeData[0][0] - 1; // the time of the first intake minus one hour
+  const graphStart = Math.round(parsedIntakeData[0][0] - 1); // the time of the first intake minus one hour
   const graphEnd = state.graphValues["timePeriodHH"];
   const graphPoints = state.graphValues["points"];
 
@@ -529,79 +660,6 @@ const renderGraph = (container) => {
 const ui = renderUI();
 renderGraph(ui.graphContainer);
 
-// --- ERROR HANDLING ---
-
-const checkInputText = (textInput, inputType) => {
-  const regex = /[^A-Za-z0-9]/; //used to check for special characters, optional
-  let errorMessage = "";
-  let inputValid = false;
-  let errorType = "";
-
-  if (textInput.length === 0 || textInput === null) {
-    errorType = "Empty," + inputType;
-    errorMessage = state.errorMessages[errorType];
-    ui.errorMessageContainer.textContent = errorMessage;
-
-    inputValid = false;
-
-    setTimeout(async () => {
-      ui.errorMessageContainer.textContent = "";
-    }, 5000);
-    return inputValid
-  } else {
-    inputValid = true
-    return inputValid
-  };
-};
-
-const checkInputNumber = (numberInput, inputType) => {
-  const regex = /[^0-9]/; //used to check for special characters or letters
-  let errorMessage = "";
-  let inputValid = false;
-  let errorType = "";
-
-  if (numberInput.length === 0 || numberInput === null || numberInput < 0) {
-    errorType = "Empty," + inputType;
-    errorMessage = state.errorMessages[errorType];
-    ui.errorMessageContainer.textContent = errorMessage;
-    setTimeout(() => {
-      ui.errorMessageContainer.textContent = "";
-    }, 5000);
-    console.log(errorMessage)
-    inputValid = false;
-    return inputValid
-  } else if (regex.test(numberInput)) {
-    errorType = "Symbols," + inputType;
-    errorMessage = state.errorMessages[errorType];
-    ui.errorMessageContainer.textContent = errorMessage;
-    setTimeout(() => {
-      ui.errorMessageContainer.textContent = "";
-    }, 5000);
-    console.log(errorMessage)
-    inputValid = false;
-    return inputValid
-  } else {
-    inputValid = true;
-    return inputValid
-  };
-};
-
-// --- DATA PARSING ---
-
-const timeToDecInt = (timeInput) => {
-  const hoursInt = parseInt(timeInput.slice(0, 2));
-  const minutesInt = parseInt(timeInput.slice(-2));
-  const timeDec = ((Math.round((hoursInt + (minutesInt / 60)) * 100)) / 100)
-  return timeDec
-};
-
-const findYValue = (xyArray, time) => {
-  for (const entry of xyArray) {
-    if (entry[0] === time) {
-      return entry[1]
-    };
-  };
-};
 
 // containers
 
@@ -714,7 +772,7 @@ addDataButton.addEventListener("click", () => {
   const valuePairs = state.chartData.xyPairs;
   const currentCaffeine = findYValue(valuePairs, currentTime);
 
-  currentCaffeineContainer.textContent = roundResult(currentCaffeine) + ` mg/L`;
+  currentCaffeineContainer.textContent = currentCaffeine ? roundResult(currentCaffeine) + ` mg/L` : "0 mg/L";
 
   caffeineChart.data.datasets[0].data = state.chartData.totalConcentration;
   caffeineChart.data.labels = state.chartData.timePoints;
