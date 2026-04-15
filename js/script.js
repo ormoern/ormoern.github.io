@@ -249,7 +249,6 @@ const state = {
           type: 'linear',
           callback: function(val, index) {
             const newValue = this.getLabelForValue(val);
-            console.log(`index:` + index)
             const returnValue = index % 3 === 0 ? formatTime(newValue) :
             ""
             return returnValue
@@ -642,10 +641,8 @@ const createXYArray = (intakeData, userData) => {
       );
     }, 0);
   });
-  console.log(totalConcentration)
 
   const xyPairs = timePoints.map((x, i) => [x, totalConcentration[i]]);
-  console.log(xyPairs);
   return { 
     totalConcentration,
     timePoints,
