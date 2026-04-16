@@ -70,6 +70,8 @@ const findYValue = (xyArray, time) => {
   for (const entry of xyArray) {
     if (entry[0] === time) {
       return entry[1]
+    } else if ((entry[0] - 0.01) === time) {
+      return entry[1]
     };
   };
 };
@@ -429,13 +431,25 @@ function renderUI() {
     currentCaffeineContainer
   );
 
+  // current caff text containers
+
+  const currentCaffeineValue = document.createElement("div");
+  const currentCaffeineLabel = document.createElement("div");
+
+  currentCaffeineContainer.append(
+    currentCaffeineValue,
+    currentCaffeineLabel
+  )
+
   // default content of data containers
 
   tableWithDefaultValues(state.defaultTableValues, drinkTableContainer);
   bodyMassContainer.textContent = state.userData["bodyMass"] + ` kg`;
   metabolismSpeedContainer.textContent = state.userData["metabolismSpeedDisplay"];
   
-  currentCaffeineContainer.innerHTML = `<span>` + state.userData["currentCaffeineLevel"] + `mg/l</span>`;
+  currentCaffeineValue.textContent = state.userData["currentCaffeineLevel"];
+  currentCaffeineValue.id = "currentCaffeineValue";
+  currentCaffeineLabel.textContent = "mg/l";
 
   // --- create input elements and append to subcontainers ---
   // time and preset drink
@@ -575,7 +589,8 @@ function renderUI() {
     customDrinkCheckBox,
     bodyMassContainer,
     metabolismSpeedContainer,
-    currentCaffeineContainer
+    currentCaffeineContainer,
+    currentCaffeineValue
  }
 };
 // --- RENDER GRAPH ---
@@ -674,6 +689,7 @@ const drinkTableContainer = ui.drinkTableContainer;
 const bodyMassContainer = ui.bodyMassContainer;
 const metabolismSpeedContainer = ui.metabolismSpeedContainer;
 const currentCaffeineContainer = ui.currentCaffeineContainer;
+const currentCaffeineValueContainer = ui.currentCaffeineValue;
 
 // --- USER ACTIONS ---
 // access input fields
@@ -786,12 +802,14 @@ addDataButton.addEventListener("click", () => {
   state.chartData = createXYArray(state.data, state.userData);
 
   const currentTime = getCurrentTimeInDec();
+  console.log(currentTime);
   const valuePairs = state.chartData.xyPairs;
+  console.log(valuePairs);
   const currentCaffeine = findYValue(valuePairs, currentTime);
 
-  const caffeineContentMgL = currentCaffeine ? roundResult(currentCaffeine) : 0;
+  console.log(currentCaffeine);
 
-  currentCaffeineContainer.innerHTML = `<span>` + caffeineContentMgL + `mg/l</span>`;
+  currentCaffeineValueContainer.textContent = currentCaffeine ? roundResult(currentCaffeine) : 0;
 
   caffeineChart.data.datasets[0].data = state.chartData.totalConcentration;
   caffeineChart.data.labels = state.chartData.timePoints;
@@ -802,7 +820,7 @@ clearDataButton.addEventListener("click", () => {
   state.data = [];
   tableWithDefaultValues(state.defaultTableValues, drinkTableContainer);
 
-  currentCaffeineContainer.innerHTML = `<span>0 mg/l</span>`;
+  currentCaffeineValueContainer.textContent = 0;
 
   state.chartData = [];
   caffeineChart.data.datasets[0].data = [];

@@ -6,6 +6,13 @@
   background: #383642;
 }
 
+#mainContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 #inputContainer {
   display: flex;
   flex-wrap: nowrap;
@@ -52,6 +59,7 @@ input[type=text], input[type=time], select {
   padding: 0.3em;
   margin: 0.5em;
   height: 1.5em;
+  width: 15em;
 }
 
 option {
@@ -88,6 +96,7 @@ label {
 
 #metabolismSpeedSelect, #presetDrinkSelect {
   height: 1.7rem;
+  width: 15.55em;
 }
 
 button {
@@ -95,11 +104,12 @@ button {
   color: #383642;
   border: none;
   box-shadow: none;
-  height: 3.5em;
+  height: 4.5em;
   padding: 1em;
   margin: 1em;
   border-radius: 0.3em;
   cursor: pointer;
+  text-align: center;
 }
 
 button:hover,
@@ -108,15 +118,30 @@ button:focus {
 }
 
 .actualDataSubContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
   background: #F3F4EF;
   padding: 1.5em;
   border-radius: 50px;
   font-size: 3em;
   text-align: center;
-  width: 0.5em;
-  height: 0.5em;
+  width: 0.3em;
+  height: 0.3em;
   margin: auto;
 }
+
+.actualDataSubContainer > div {
+  background: #F3F4EF;
+  font-size: 0.5em;
+}
+
+#currentCaffeineValue{
+  font-size: 1.1em;
+}
+
 span {
   background: #F3F4EF;
   font-size: 0.6em;
@@ -149,7 +174,7 @@ span {
   padding: 1em;
   margin: auto;
   height: auto;
-  width: 25em;
+  width: 21em;
 }
 
 .graphContainer {
@@ -157,6 +182,8 @@ span {
 }
 canvas {
   padding: 1em;
+  width: 100%;
+
   color: #F3F4EF;
   background: #92929f
 }
